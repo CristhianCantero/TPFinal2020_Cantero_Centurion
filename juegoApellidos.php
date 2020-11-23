@@ -26,10 +26,10 @@ function cargarPalabras(){
 function cargarJuegos(){
 	$coleccionJuegos = array();
     $coleccionJuegos[0] = array("puntos"=> 5, "indicePalabra" => 3);
-    $coleccionJuegos[1] = array("puntos"=> 25, " indicePalabra " => 2);
-    $coleccionJuegos[2] = array("puntos"=> 0, " indicePalabra " => 0);//no descubrio la palabra
-    $coleccionJuegos[3] = array("puntos"=> 8, " indicePalabra " => 1);
-    $coleccionJuegos[4] = array("puntos"=> 0, " indicePalabra " => 4);//no descubrio la palabra
+    $coleccionJuegos[1] = array("puntos"=> 25, "indicePalabra" => 2);
+    $coleccionJuegos[2] = array("puntos"=> 0, "indicePalabra" => 0);//no descubrio la palabra
+    $coleccionJuegos[3] = array("puntos"=> 8, "indicePalabra" => 1);
+    $coleccionJuegos[4] = array("puntos"=> 0, "indicePalabra" => 4);//no descubrio la palabra
 
     return $coleccionJuegos;
 }
@@ -298,8 +298,9 @@ function agregarJuego($coleccionJuegos,$puntos,$indicePalabra){
 function mostrarPalabra($coleccionPalabras,$indicePalabra){
     //$coleccionPalabras[0]= array("palabra"=> "papa" , "pista" => "se cultiva bajo tierra", "puntosPalabra"=>7);
     
-    /*>>> Completar el cuerpo de la función, respetando lo indicado en la documentacion <<<*/
-    echo "Pista: " . $coleccionPalabras[$indicePalabra]["pista"] . "\n";
+    echo "  Palabra: " . $coleccionPalabras[$indicePalabra]["palabra"] . "\n";
+    echo "  Pista: " . $coleccionPalabras[$indicePalabra]["pista"] . "\n";
+    echo "  Puntos palabra: " . $coleccionPalabras[$indicePalabra]["puntosPalabra"] . "\n";
     echo "--------------------------------------------------------------\n";
 }
 
@@ -314,8 +315,8 @@ function mostrarJuego($coleccionJuegos,$coleccionPalabras,$indiceJuego){
     //array("puntos"=> 8, "indicePalabra" => 1)
     echo "\n\n";
     echo "<-<-< Juego ".$indiceJuego." >->->\n";
-    echo "  Puntos ganados: ".$coleccionJuegos[$indiceJuego]["puntos"]."\n";
-    echo "  Información de la palabra:\n";
+    echo "Puntos ganados: ".$coleccionJuegos[$indiceJuego]["puntos"]."\n";
+    echo "Información de la palabra:\n";
     mostrarPalabra($coleccionPalabras,$coleccionJuegos[$indiceJuego]["indicePalabra"]);
     echo "\n";
 }
@@ -345,7 +346,6 @@ do{
         $colePalabras = cargarPalabras();
         $cantPalabras = count($colePalabras) - 1;
         $indiceElegido = solicitarIndiceEntre(0, $cantPalabras);
-        // mostrarPalabra($colePalabras, $indiceElegido);
 
         jugar($colePalabras, $indiceElegido, $cantInt);
         break;
@@ -353,7 +353,12 @@ do{
 
         break;
     case 4: //Mostrar la información completa de un número de juego
+        $coleJuegos = cargarJuegos();
+        $colePalabras = cargarPalabras();
+        $cantJuegos = count($coleJuegos) - 1;
+        $indiceElegidoJuego = solicitarIndiceEntre(0, $cantJuegos);
 
+        mostrarJuego($coleJuegos, $colePalabras, $indiceElegidoJuego);
         break;
     case 5: //Mostrar la información completa del primer juego con más puntaje
 
