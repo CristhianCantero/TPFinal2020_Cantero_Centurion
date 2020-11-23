@@ -39,11 +39,13 @@ function cargarJuegos(){
 * @param string $palabra
 * @return array
 */
-function dividirPalabraEnLetras($palabra){
-    $letrasPalabra = str_split($palabra);
-    
-    $coleccionLetras = array("letra" => $letrasPalabra, "descubierta" => false);
-    
+function dividirPalabraEnLetras($palabra){    
+    // $coleccionLetras = array("letra" => , "descubierta" => false);
+    $coleccionLetras = array();
+    for($i=0; $i<strlen($palabra); $i++){
+        $coleccionLetras[$i]["letra"] = $palabra[$i];
+        $coleccionLetras[$i]["descubierta"] = false;
+    }
     return($coleccionLetras);
 }
 
@@ -103,11 +105,13 @@ function existePalabra($coleccionPalabras,$palabra){
 function existeLetra($coleccionLetras, $letra){
     $contPalabras = count($coleccionLetras);
     $existeLetra = false;
-    for($i=0; $i<$contPalabras; $i++){
-        if($coleccionLetras["letra"][$i] == $letra){
+    $i=0;
+    do{
+        if($coleccionLetras[$i]["letra"] == $letra){
             $existeLetra = true;
         }
-    }
+        $i++;
+    }while($i<$contPalabras);
     return($existeLetra);
 }
 
@@ -150,8 +154,14 @@ function solicitarIndiceEntre($min,$max){
 * @return boolean
 */
 function palabraDescubierta($coleccionLetras){
-    
-    /*>>> Completar el cuerpo de la función, respetando lo indicado en la documentacion <<<*/
+    $cantidadLetras = count($coleccionLetras);
+    $descubierta = true;
+    for ($i=0; $i<$cantidadLetras; $i++){
+        if($coleccionLetras[$i]["descubierta"] == false){
+            $descubierta = false;
+        }
+    }
+    return($descubierta);
 }
 
 /**
@@ -166,7 +176,6 @@ function solicitarLetra(){
         }else{
             $letraCorrecta = true;
         }
-        
     }while(!$letraCorrecta);
     
     return $letra;
@@ -181,9 +190,16 @@ function solicitarLetra(){
 */
 function destaparLetra($coleccionLetras, $letra){
     
-    /*>>> Completar el cuerpo de la función, respetando lo indicado en la documentacion <<<*/
+    $cantidadLetras = count($coleccionLetras);
+   
+    for ($i=0; $i<$cantidadLetras; $i++){
+        if($coleccionLetras[$i]["letra"] == $letra){
+            $coleccionLetras[$i]["descubierta"] = true;
+        }
+    }
+    
+    return $coleccionLetras;
 }
-
 /**
 * obtiene la palabra con las letras descubiertas y * (asterisco) en las letras no descubiertas. Ejemplo: he**t*t*s
 * @param array $coleccionLetras
@@ -191,8 +207,18 @@ function destaparLetra($coleccionLetras, $letra){
 */
 function stringLetrasDescubiertas($coleccionLetras){
     $pal = "";
-    
-    /*>>> Completar el cuerpo de la función, respetando lo indicado en la documentacion <<<*/
+    $cantidadLetras = count($coleccionLetras);
+   
+    for ($i=0; $i<$cantidadLetras; $i++){
+        $letrita = $coleccionLetras[$i]["letra"];
+
+        if($coleccionLetras[$i]["descubierta"] == false){
+            $letrita = "*";
+            $pal = $pal . $letrita;
+        } else {
+            $pal = $pal . $letrita;
+        }
+    }
     
     return $pal;
 }
@@ -208,36 +234,42 @@ function stringLetrasDescubiertas($coleccionLetras){
 * @return int puntaje obtenido
 */
 function jugar($coleccionPalabras, $indicePalabra, $cantIntentos){
-    $pal = $coleccionPalabras[$indicePalabra]["palabra"];
-    $coleccionLetras = dividirPalabraEnLetras($pal);
-    //print_r($coleccionLetras);
+    $pal = $coleccionPalabras[$indicePalabra]["palabra"]; //trae la palabra elegida por el usuario en forma de string
+    $coleccionLetras = dividirPalabraEnLetras($pal); //hace el llamado a la funcion dividirPalabraEnLetras() en la que divide el string en un array de letras
+    
     $puntaje = 0;
     $intentosRealizados = 0;
     $auxIntentos = $cantIntentos;
-    while($intentosRealizados<=$cantIntentos){
+
+    echo "Pista: " . $coleccionPalabras[$indicePalabra]["pista"] . "\n";
+
+    $palabraFueDescubierta = false;
+
+    while(($intentosRealizados<$cantIntentos) && ($palabraFueDescubierta == false)){
+
         $letra = solicitarLetra();
         $existe = existeLetra($coleccionLetras, $letra);
+
         if($existe){
-            echo "La letra existe" . "\n";
+            echo "La letra '" . $letra . "' PERTENECE a la palabra." . "\n";
+            $coleccionLetras = destaparLetra($coleccionLetras, $letra);
+            $palabraADescubrir = stringLetrasDescubiertas($coleccionLetras);
+            echo "Palabra a descubrir: " . $palabraADescubrir . "\n";
         }else{
             echo "La letra no existe" . "\n";
             $intentosRealizados++;
             $auxIntentos--;
-            echo "Intentos restantes: " . $auxIntentos;
+            echo "La letra '" . $letra . "' NO pertenece a la palabra. ";
+            echo "Intentos restantes: " . $auxIntentos . "\n";
+            $coleccionLetras = destaparLetra($coleccionLetras, $letra);
+            $palabraADescubrir = stringLetrasDescubiertas($coleccionLetras);
         }
-        
-        
+        $palabraFueDescubierta = palabraDescubierta($coleccionLetras);
     }
-    
-    /*>>> Completar el cuerpo de la función, respetando lo indicado en la documentacion <<<*/
-    
-    //Mostrar pista:
-    
-    //solicitar letras mientras haya intentos y la palabra no haya sido descubierta:
     
     if($palabraFueDescubierta){
         //obtener puntaje:
-        
+        $puntaje = $coleccionPalabras[$indicePalabra]["puntosPalabra"] + $auxIntentos;
         echo "\n¡¡¡¡¡¡GANASTE ".$puntaje." puntos!!!!!!\n";
     }else{
         echo "\n¡¡¡¡¡¡AHORCADO AHORCADO!!!!!!\n";
@@ -313,7 +345,7 @@ do{
         $colePalabras = cargarPalabras();
         $cantPalabras = count($colePalabras) - 1;
         $indiceElegido = solicitarIndiceEntre(0, $cantPalabras);
-        mostrarPalabra($colePalabras, $indiceElegido);
+        // mostrarPalabra($colePalabras, $indiceElegido);
 
         jugar($colePalabras, $indiceElegido, $cantInt);
         break;
