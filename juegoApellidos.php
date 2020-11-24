@@ -26,10 +26,10 @@ function cargarPalabras(){
 function cargarJuegos(){
 	$coleccionJuegos = array();
     $coleccionJuegos[0] = array("puntos"=> 5, "indicePalabra" => 3);
-    $coleccionJuegos[1] = array("puntos"=> 25, "indicePalabra" => 2);
+    $coleccionJuegos[1] = array("puntos"=> 0, "indicePalabra" => 4);
     $coleccionJuegos[2] = array("puntos"=> 0, "indicePalabra" => 0);//no descubrio la palabra
     $coleccionJuegos[3] = array("puntos"=> 8, "indicePalabra" => 1);
-    $coleccionJuegos[4] = array("puntos"=> 0, "indicePalabra" => 4);//no descubrio la palabra
+    $coleccionJuegos[4] = array("puntos"=> 25, "indicePalabra" => 2);//no descubrio la palabra
 
     return $coleccionJuegos;
 }
@@ -325,6 +325,27 @@ function mostrarJuego($coleccionJuegos,$coleccionPalabras,$indiceJuego){
 /*>>> Implementar las funciones necesarias para la opcion 5 del menú <<<*/
 
 /*>>> Implementar las funciones necesarias para la opcion 6 del menú <<<*/
+/**
+ * Busca el primer juego con un mayor puntaje al ingresado por el usuario
+ * @param array $coleccionJuegos
+ * @param array $coleccionPalabras
+ * @param int $puntajeABuscar
+*/
+function encontrarJuegoPuntaje($coleccionJuegos, $coleccionPalabras, $puntajeABuscar){
+    $cantJuegos = count($coleccionJuegos);
+    $juegoMayorEncontrado = false;
+    $i = 0;
+    do{
+        if($coleccionJuegos[$i]["puntos"] > $puntajeABuscar){
+            mostrarJuego($coleccionJuegos, $coleccionPalabras, $i);
+            $juegoMayorEncontrado = true;
+        }
+        $i++;
+    }while(($i<$cantJuegos) && ($juegoMayorEncontrado == false));
+    if(!$juegoMayorEncontrado){
+        echo "No hay ningun juego que supere al puntaje ingresado" . "\n";
+    }
+}
 
 /*>>> Implementar las funciones necesarias para la opcion 7 del menú <<<*/
 
@@ -364,7 +385,11 @@ do{
 
         break;
     case 6: //Mostrar la información completa del primer juego que supere un puntaje indicado por el usuario
-
+        echo "Ingrese puntaje para encontrar el primer juego que supere dicho puntaje: ";
+        $puntajeUsuario = trim(fgets(STDIN));
+        $colePalabras = cargarPalabras();
+        $coleJuegos = cargarJuegos();
+        encontrarJuegoPuntaje($coleJuegos, $colePalabras, $puntajeUsuario);
         break;
     case 7: //Mostrar la lista de palabras ordenada por orden alfabetico
 
