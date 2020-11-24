@@ -328,23 +328,24 @@ function mostrarJuego($coleccionJuegos,$coleccionPalabras,$indiceJuego){
 /**
  * Busca el primer juego con un mayor puntaje al ingresado por el usuario
  * @param array $coleccionJuegos
- * @param array $coleccionPalabras
  * @param int $puntajeABuscar
+ * @return int
 */
-function encontrarJuegoPuntaje($coleccionJuegos, $coleccionPalabras, $puntajeABuscar){
+function encontrarJuegoPuntaje($coleccionJuegos, $puntajeABuscar){
     $cantJuegos = count($coleccionJuegos);
     $juegoMayorEncontrado = false;
     $i = 0;
     do{
         if($coleccionJuegos[$i]["puntos"] > $puntajeABuscar){
-            mostrarJuego($coleccionJuegos, $coleccionPalabras, $i);
+            $indice = $i;
             $juegoMayorEncontrado = true;
         }
         $i++;
     }while(($i<$cantJuegos) && ($juegoMayorEncontrado == false));
     if(!$juegoMayorEncontrado){
-        echo "No hay ningun juego que supere al puntaje ingresado" . "\n";
+        $indice = -1;
     }
+    return($indice);
 }
 
 /*>>> Implementar las funciones necesarias para la opcion 7 del menú <<<*/
@@ -379,37 +380,42 @@ $cantInt = 6;
 do{
     $opcion = seleccionarOpcion();
     switch ($opcion) {
-    case 1: //Jugar con una palabra aleatoria
+        case 1: //Jugar con una palabra aleatoria
         
         break;
-    case 2: //Jugar con una palabra elegida
+        case 2: //Jugar con una palabra elegida
         $colePalabras = cargarPalabras();
         $cantPalabras = count($colePalabras) - 1;
         $indiceElegido = solicitarIndiceEntre(0, $cantPalabras);
-
+        
         jugar($colePalabras, $indiceElegido, $cantInt);
-        break;
+    break;
     case 3: //Agregar una palabra al listado
-
-        break;
+        
+    break;
     case 4: //Mostrar la información completa de un número de juego
         $coleJuegos = cargarJuegos();
         $colePalabras = cargarPalabras();
         $cantJuegos = count($coleJuegos) - 1;
         $indiceElegidoJuego = solicitarIndiceEntre(0, $cantJuegos);
-
+        
         mostrarJuego($coleJuegos, $colePalabras, $indiceElegidoJuego);
-        break;
+    break;
     case 5: //Mostrar la información completa del primer juego con más puntaje
-
-        break;
+        
+    break;
     case 6: //Mostrar la información completa del primer juego que supere un puntaje indicado por el usuario
         echo "Ingrese puntaje para encontrar el primer juego que supere dicho puntaje: ";
         $puntajeUsuario = trim(fgets(STDIN));
         $colePalabras = cargarPalabras();
         $coleJuegos = cargarJuegos();
-        encontrarJuegoPuntaje($coleJuegos, $colePalabras, $puntajeUsuario);
-        break;
+        $indiceEncontrado = encontrarJuegoPuntaje($coleJuegos, $puntajeUsuario);
+        if($indiceEncontrado <> -1){
+            mostrarJuego($coleJuegos, $colePalabras, $indiceEncontrado);
+        }else{
+            echo "No hay ningun juego que supere al puntaje ingresado" . "\n";
+        }
+    break;
     case 7: //Mostrar la lista de palabras ordenada por orden alfabetico
         $colePalabras = cargarPalabras();
         mostrarListaOrdenada($colePalabras);
