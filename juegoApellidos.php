@@ -348,9 +348,28 @@ function encontrarJuegoPuntaje($coleccionJuegos, $coleccionPalabras, $puntajeABu
 }
 
 /*>>> Implementar las funciones necesarias para la opcion 7 del menú <<<*/
-
-
-
+/**
+ * Ordenar la coleccion de palabras alfabeticamente
+ * @param array $colePalabras
+*/
+function mostrarListaOrdenada($colePalabras){
+    echo "Elegir ordenar alfabeticamente de la A-Z (1) o Z-A (2): ";
+    $opcion = trim(fgets(STDIN));
+    if($opcion == 1){
+        asort($colePalabras);
+        echo "Palabras ordenadas alfabeticamente de la A-Z: " . "\n";
+    }elseif($opcion == 2){
+        arsort($colePalabras);
+        echo "Palabras ordenadas alfabeticamente de la Z-A: " . "\n";
+    }
+    
+    foreach ($colePalabras as $palabra) {
+        echo "\n";
+        echo "  Palabra: " . $palabra["palabra"] . "\n";
+        echo "  Pista: " . $palabra["pista"] . "\n";
+        echo "  Puntos palabra: " . $palabra["puntosPalabra"] . "\n";
+    }
+}
 
 /******************************************/
 /************** PROGRAMA PRINCIAL *********/
@@ -392,7 +411,8 @@ do{
         encontrarJuegoPuntaje($coleJuegos, $colePalabras, $puntajeUsuario);
         break;
     case 7: //Mostrar la lista de palabras ordenada por orden alfabetico
-
+        $colePalabras = cargarPalabras();
+        mostrarListaOrdenada($colePalabras);
         break;
     }
 }while($opcion != 8);
