@@ -402,7 +402,20 @@ do{
         mostrarJuego($coleJuegos, $colePalabras, $indiceElegidoJuego);
     break;
     case 5: //Mostrar la información completa del primer juego con más puntaje
-        
+        $valoralto = 0; //Variable que almacenará el mayor puntaje
+        $indicealto = 0; //Variable que almacenará el índice del mayor puntaje dentro del arreglo de juegos
+        $coleccPalabras = cargarPalabras(); //Traemos el arreglo de palabras
+        $todosPuntajes = cargarJuegos(); //Traemos el arreglo de juegos
+        $cantJuegos = count($todosPuntajes) - 1;
+
+        for ($i = 0; $i <= $cantJuegos; $i++){
+            if ($todosPuntajes[$i]["puntos"] > $valoralto){
+                $valoralto = $todosPuntajes[$i]["puntos"];
+                $indicealto = $i;
+            }
+        }
+
+        mostrarJuego($todosPuntajes, $coleccPalabras, $indicealto); //Llamamos a la función para mostrar el juego con mayor puntaje
     break;
     case 6: //Mostrar la información completa del primer juego que supere un puntaje indicado por el usuario
         echo "Ingrese puntaje para encontrar el primer juego que supere dicho puntaje: ";
