@@ -381,7 +381,11 @@ do{
     $opcion = seleccionarOpcion();
     switch ($opcion) {
         case 1: //Jugar con una palabra aleatoria
-        
+            $coleccPalabras = cargarPalabras(); //Traemos el arreglo de palabras
+            $cantPalabras = count($coleccPalabras) - 1; //Obtenemos la cantidad de palabras en el arreglo
+            $indiceAleatorio = indiceAleatorioEntre(0, $cantPalabras); //Obtenemos un índice aleatorio entre 0 y la cantidad de palabras en el arreglo
+    
+            jugar($coleccPalabras, $indiceAleatorio, $cantInt);
         break;
         case 2: //Jugar con una palabra elegida
         $colePalabras = cargarPalabras();
