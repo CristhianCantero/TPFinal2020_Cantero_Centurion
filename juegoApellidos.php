@@ -1,12 +1,12 @@
 <?php
 /******************************************
-* Completar:
 * Cristhian Cantero / Braian Centurion - FAI-3073 / FAI-3001
 * https://github.com/CristhianCantero/TPFinal2020_Cantero_Centurion
+* https://github.com/BraianCenturion2001/TPFinal2020_Cantero_Centurion.git
 ******************************************/
 
 /**
-* genera un arreglo de palabras para jugar
+* Genera un arreglo de palabras para jugar
 * @return array
 */
 function cargarPalabras(){
@@ -22,7 +22,7 @@ function cargarPalabras(){
 }
 
 /**
-* genera un arreglo de los juegos ya realizados
+* Genera un arreglo de los juegos ya realizados
 * @return array
 */
 function cargarJuegos(){
@@ -38,7 +38,7 @@ function cargarJuegos(){
 }
 
 /**
-* a partir de la palabra genera un arreglo para determinar si sus letras fueron o no descubiertas
+* A partir de la palabra genera un arreglo para determinar si sus letras fueron o no descubiertas
 * @param string $palabra
 * @return array
 */
@@ -55,7 +55,7 @@ function dividirPalabraEnLetras($palabra){
 }
 
 /**
-* muestra y obtiene una opcion de menú ***válida***
+* Muestra y obtiene una opcion de menú ***válida***
 * @return int
 */
 function seleccionarOpcion(){
@@ -131,8 +131,30 @@ function existeLetra($coleccionLetras, $letra){
 * @param array $coleccionPalabras
 * @return array  colección de palabras modificada con la nueva palabra.
 */
-/*>>> Completar la interfaz y cuerpo de la función. Debe respetar la documentación <<<*/
+function agregarPalabras($coleccionPalabras){
 
+    do{
+        echo "Ingrese una palabra: ";
+        $palabraSolicitada = strtolower(trim(fgets(STDIN)));
+
+        $existePalabra = existePalabra($coleccionPalabras, $palabraSolicitada);
+        $indiceUltimaPalabra = count($coleccionPalabras);
+        if($existePalabra){
+            echo "La palabra ya existe en el listado." . "\n";
+            echo "Ingrese otra palabra." . "\n";
+        }else{
+            $coleccionPalabras[$indiceUltimaPalabra]["palabra"] = $palabraSolicitada;
+            echo "Ingrese pista: ";
+            $pistaPalabra = strtolower(trim(fgets(STDIN)));
+            $coleccionPalabras[$indiceUltimaPalabra]["pista"] = $pistaPalabra;
+            echo "Ingrese puntos: ";
+            $puntajePalabra = trim(fgets(STDIN));
+            $coleccionPalabras[$indiceUltimaPalabra]["puntosPalabra"] = $puntajePalabra;
+        }
+    }while($existePalabra);
+
+    return($coleccionPalabras);
+}
 
 /**
  * Obtener indice aleatorio
@@ -393,7 +415,7 @@ function mostrarListaOrdenada($colePalabras){
         echo "  Puntos palabra: " . $palabra["puntosPalabra"] . "\n";
     }
     echo "Forma con funcion print_r: " . "\n";
-    print_r($colePalabras);
+    print_r($colePalabras); //La función print_r se encarga de mostrar toda la información dentro de una variable, en este caso imprimirá todos los valores dentro del arreglo
 }
 
 /******************************************/
@@ -419,7 +441,7 @@ do{
             $coleJuegos = agregarJuego($coleJuegos,$puntajeObtenido,$indiceElegido); //Agregas el puntaje obtenido en el juego al array coleccionJuegos
         break;
         case 3: //Agregar una palabra al listado
-            
+            $colePalabras = agregarPalabras($colePalabras);
         break;
         case 4: //Mostrar la información completa de un número de juego
             $cantJuegos = count($coleJuegos) - 1;
@@ -455,3 +477,27 @@ do{
         }
 }while($opcion != 8);
 
+/**
+ * La función switch cumple una condición parecida al if.
+ * Asi sería con un if
+ * if ($i == 0) {
+ *    echo "i es igual a 0";
+ * } elseif ($i == 1) {
+ *    echo "i es igual a 1";
+ * } elseif ($i == 2) {
+ *    echo "i es igual a 2";
+ * }
+ * 
+ * Y asi sería lo mismo pero haciendo uso de la funcion switch
+ *switch ($i) {
+ *    case 0:
+ *        echo "i es igual a 0";
+ *        break;
+ *    case 1:
+ *        echo "i es igual a 1";
+ *        break;
+ *    case 2:
+ *        echo "i es igual a 2";
+ *        break;
+ *}
+ */
