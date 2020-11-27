@@ -7,3 +7,4 @@ En este repositorio se va a encontrar la entrega del código desarrollado para e
 - Integrantes: Cristhian Cantero y Braian Centurion
 - Profesores: María José Rotter, Karina Rozas, David Torchinsky y Agustin Chiarotto.
  
+Ya evaluado
